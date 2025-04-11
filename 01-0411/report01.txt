@@ -1,0 +1,15 @@
+4J 30番 百瀬 奏 テーマ01 レポート
+
+課題1
+$ gcc koza.c -o koza
+$ ./koza
+my_kozaの値は 0x56e53ebdf2a0
+利息は50.000000
+
+課題3
+javaはメモリの明示的な確保が不要
+javaはアクセス修飾子(public)がメイン関数についている
+メンバ変数の呼び出しの構文が異なる 
+  ex) 
+  　c: struct->member 
+    java: struct.member
