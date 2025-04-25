@@ -13,3 +13,9 @@ javaはアクセス修飾子(public)がメイン関数についている
   ex) 
   　c: struct->member 
     java: struct.member
+
+課題4
+単利計算を複利計算に変更。
+for (int i = 0; i < month; i++) {
+　_gankin = (int) (_gankin * (1 + _riritsu));
+}

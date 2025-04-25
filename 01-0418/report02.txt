@@ -1,0 +1,108 @@
+4J 30番 百瀬 奏 テーマ02 レポート
+a)
+	malloc(sizeof(struct Koza)) は、struct Koza型の構造体のサイズ分のメモリをヒープ領域から確保し、そのメモリの先頭アドレスを返す。
+	my_kozaは構造体の参照を保持しているポインタで、構造体が格納されたメモリ領域にアクセスするために使用される。利率や元金の値が直接入っているわけではなく、my_kozaが指し示す場所に利率や元金を格納するためのメモリ領域が確保されている。
+b)
+	もし、Koza_syokika関数がポインタではなく構造体を値渡しで受け取る場合、構造体は関数に渡される際にコピーされる。
+	つまり、Koza_syokika関数内での変更は、関数内でのコピーに対して行われるため、関数を抜けるとその変更は破棄され、main関数内の元々のmy_kozaへ変更を適応することができない。
+	これがポインタであれば、関数内での変更がmain関数内の元のmy_kozaに直接反映されるため意図した初期化ができる。
+c)
+	riritsuは銀行側が設定する値であり、gankinは利用者側が設定する値になる。そのため値を代入する場所を変えている。
+
+2
+Javaのクラス内では変数の定義以外にも関数が定義されているので、
+C言語のStruct構造体は純粋な変数の集まりであり、Javaのクラスは変数と関数の集まりであると考えられる。
+
+3
+```java
+class Koza {
+    double _riritsu;
+    int _gankin;
+
+    Koza() {
+        _riritsu = 0.01;
+    }
+    double Risoku(int month){
+        for (int i = 0; i < month; i++) {
+            _gankin = (int) (_gankin * (1 + _riritsu));
+        }
+        return _gankin;
+    }
+
+    public static void main(String[] args) {
+        double kotae;
+        Koza my_koza;
+        my_koza = new Koza();
+        // user args for gankin
+        if (args.length == 1) {
+            my_koza._gankin = Integer.parseInt(args[0]);
+        } else {
+            System.out.println("引数が不正です");
+            return;
+        }
+        System.out.println("my_kozaの値は" + my_koza);
+        kotae = my_koza.Risoku(12);
+        System.out.println("1年後の口座残高は" + kotae);
+    }
+}
+```
+$ javac Koza2.java
+$ java Koza2 100000
+my_kozaの値はorg.kqnade.Koza@41cf53f9
+1年後の口座残高は112678.0
+
+4
+```Koza3.java
+class Koza {
+    double _riritsu;
+    int _gankin;
+
+    Koza() {
+        _riritsu = 0.01;
+    }
+    double Risoku(int month){
+        for (int i = 0; i < month; i++) {
+            _gankin = (int) (_gankin * (1 + _riritsu));
+        }
+        return _gankin;
+    }
+
+    public static void main(String[] args) {
+        double kotae;
+        Koza my_koza;
+        int month = 0;
+        my_koza = new Koza();
+        if (args.length == 2) {
+            try {
+                month = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("2引数は整数で指定してください");
+                System.exit(1);
+            }
+        } else if (args.length != 1) {
+            System.out.println("引数は1つか2つ指定してください");
+            System.exit(1);
+        } else {
+            month = 12;
+        }
+        try {
+            my_koza._gankin = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("1引数は整数で指定してください");
+            System.exit(1);
+        }
+
+        System.out.println("my_kozaの値は" + my_koza);
+        kotae = my_koza.Risoku(month);
+        System.out.println(month + "ヶ月後の利息は" + kotae);
+
+        // exit
+        System.exit(0);
+    }
+}
+```
+$ javac Koza3.java
+$ java Koza3 1000000 120
+my_kozaの値はorg.kqnade.Koza@41cf53f9
+120ヶ月後の利息は3300280.0
+第2引数で月数を入力できるようにした。

@@ -8,9 +8,10 @@ class Koza {
         _riritsu = 0.01;
     }
     double Risoku(int month){
-        double kekka;
-        kekka = (double) _gankin * _riritsu * (double)month / 12.0;
-        return kekka;
+        for (int i = 0; i < month; i++) {
+            _gankin = (int) (_gankin * (1 + _riritsu));
+        }
+        return _gankin;
     }
 
     public static void main(String[] args) {

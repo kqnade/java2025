@@ -1,0 +1,159 @@
+4J 30番 百瀬 奏 テーマ03 レポート
+changelog
+4/25 16:06 課題5にソースコード不備があったため追記
+
+//Work 1
+```Vector2D.java
+public class Vector2D {
+    double x;
+    double y;
+
+    public void print() {
+        System.out.println("x=" + x + ", y=" + y);
+    }
+}
+```
+
+//Work 2
+```Vector2DApp.java
+public class Vector2DApp {
+    public static void main(String[] args) {
+        Vector2D a = new Vector2D();
+        try {
+            a.x = Double.parseDouble(args[0]);
+            a.y = Double.parseDouble(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter two numbers.");
+            return;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Please provide two arguments.");
+            return;
+        }
+        a.print();
+    }
+}
+```
+$ javac Vector2D.java
+$ javac Vector2DApp.java
+$ java Vector2DApp 1.0 2.0
+x=1.0, y=2.0
+
+//Work 3
+```Vector2DApp.java
+public class Vector2DApp {
+    public static void main(String[] args) {
+        Vector2D a = new Vector2D();
+        try {
+            a.x = Double.parseDouble(args[0]);
+            a.y = Double.parseDouble(args[1]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter two numbers.");
+            return;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Please provide two arguments.");
+            return;
+        }
+        a.print();
+
+        Vector2D b = a;
+        try {
+            b.x = Double.parseDouble(args[2]);
+            b.y = Double.parseDouble(args[3]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter two numbers.");
+            return;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Please provide four arguments.");
+            return;
+        }
+        b.print();
+        a.print(); // !WARN: Something unexpected happens here :)
+    }
+}
+```
+$ javac Vector2D.java
+$ javac Vector2DApp.java
+$ java Vector2DApp 1.0 2.0 3.0 4.0
+x=1.0, y=2.0
+x=3.0, y=4.0
+x=3.0, y=4.0
+
+//Work 4
+インスタンスが生成されるとメモリ上に領域が確保される。
+そのメモリのアドレスはaという変数に格納される。
+その後、bという変数にaのアドレスが格納される。
+つまり、aとbは同じメモリ領域を指している。
+なのでbの値を変更すると、aの値も変更される。
+
+//Work 5
+```Vector2D.java
+import java.lang.Math;
+
+public class Vector2D {
+    public final double x;
+    public final double y;
+
+    // Default constructor
+    public Vector2D(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void print() {
+        System.out.println("x=" + x + ", y=" + y);
+    }
+    // Calculates the length of the vector
+    public double length() {
+        return Math.sqrt(x * x + y * y);
+    }
+    // Calculates the angle of the vector in radians or degrees
+    public double angle(boolean inDegrees) {
+        double angle = Math.atan2(y, x);
+        return inDegrees ? Math.toDegrees(angle) : angle;
+    }
+    // Normalizes the vector to a unit vector
+    public Vector2D normalize() {
+        double len = length();
+        if (len == 0) {
+            return new Vector2D(0, 0);
+        }
+        return new Vector2D(x / len, y / len);
+    }
+}
+```
+```Vector2DApp.java
+package personal.kqnade;
+
+public class Vector2DApp {
+    public static void main(String[] args) {
+        double x = 0;
+        double y = 0;
+        try {
+            // input from arguments
+            x = Double.parseDouble(args[0]);
+            y = Double.parseDouble(args[1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Please provide two arguments for x and y.");
+            return;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please provide numeric values for x and y.");
+            return;
+        }
+        Vector2D a = new Vector2D(x, y);
+        a.print();
+        System.out.println("Length: " + a.length());
+        System.out.println("Angle (degrees): " + a.angle(true));
+        System.out.println("Angle (radians): " + a.angle(false));
+        System.out.println("Normalized: " + a.normalize().x + ", " + a.normalize().y);
+    }
+}
+```
+$ javac Vector2D.java
+$ java Vector2DApp 3.0 5.0
+x=3.0, y=5.0
+Length: 5.830951894845301
+Angle (degrees): 59.03624346792648
+Angle (radians): 1.0303768265243125
+Normalized: 0.5144957554275265, 0.8574929257125441
+追加内容
+- Vector2Dクラスに長さ、角度、正規化のメソッドを追加
