@@ -1,0 +1,139 @@
+4J 30番 百瀬 奏 テーマ05 レポート
+
+//Work1
+```java
+public Vector2D(double x, double y) {
+    this.x = x;
+    this.y = y;
+}
+public Vector2D() {
+    this.x = 0;
+    this.y = 0;
+}
+public void add(Vector2D InputVec) {
+    this.x += InputVec.x;
+    this.y += InputVec.y;
+}
+public static Vector2D add(Vector2D InputVec1, Vector2D InputVec2) {
+    Vector2D result = new Vector2D();
+    result.x = InputVec1.x + InputVec2.x;
+    result.y = InputVec1.y + InputVec2.y;
+    return result;
+}
+```
+```java
+public static void main(String[] args) {
+	double x = 3, y = 4;
+	double a = 1, b = 2;
+	Vector2D vectorA = new Vector2D(x, y);
+	Vector2D vectorB = new Vector2D(a, b);
+	System.out.println("Vector A = ");
+	vectorA.print();
+	System.out.println("Vector B = ");
+	vectorB.print();
+	Vector2D VectorW = Vector2D.add(vectorA, vectorB);
+	System.out.println("Vector A + Vector B = ");
+	VectorW.print();
+}
+```
+```
+Vector A = 
+3.0 4.0
+Vector B = 
+1.0 2.0
+Vector A + Vector B = 
+4.0 6.0
+```
+
+// Work2
+```
+public static  Vector2D subtract(Vector2D InputVec1, Vector2D InputVec2) {
+    Vector2D result = new Vector2D();
+    result.x = InputVec1.x - InputVec2.x;
+    result.y = InputVec1.y - InputVec2.y;
+    return result;
+}
+```
+```
+public static void main(String[] args) {
+    double x = 3, y = 4;
+    double a = 1, b = 2;
+    Vector2D vectorA = new Vector2D(x, y);
+    Vector2D vectorB = new Vector2D(a, b);
+
+    System.out.println("Vector A = ");
+    vectorA.print();
+    System.out.println("Vector B = ");
+    vectorB.print();
+
+    Vector2D VectorW = Vector2D.subtract(vectorA, vectorB);
+    System.out.println("Vector A - Vector B = ");
+    VectorW.print();
+    
+    System.out.println("Vector A = ");
+    vectorA.print();
+    System.out.println("Vector B = ");
+    vectorB.print();
+}
+```
+```
+Vector A = 
+3.0 4.0
+Vector B = 
+1.0 2.0
+Vector A - Vector B = 
+2.0 2.0
+Vector A = 
+3.0 4.0
+Vector B = 
+1.0 2.0
+```
+
+// Work3
+```
+public static double calcDistance(Vector2D InputVec1, Vector2D InputVec2) {
+    Vector2D diff = subtract(InputVec1, InputVec2);
+    return diff.normCalc();
+}
+```
+```
+public static void main(String[] args) {
+    double x = 3, y = 4;
+    double a = 1, b = 2;
+    Vector2D vectorA = new Vector2D(x, y);
+    Vector2D vectorB = new Vector2D(a, b);
+
+    System.out.println("Vector A = ");
+    vectorA.print();
+    System.out.println("Vector B = ");
+    vectorB.print();
+
+    System.out.println("Distance between A and B = ");
+    System.out.println(Vector2D.calcDistance(vectorA, vectorB));
+
+    // Check VecA and VecB isn't changed
+    System.out.println("Vector A = ");
+    vectorA.print();
+    System.out.println("Vector B = ");
+    vectorB.print();
+}
+```
+```
+Vector A = 
+3.0 4.0
+Vector B = 
+1.0 2.0
+Distance between A and B = 
+2.8284271247461903
+Vector A = 
+3.0 4.0
+Vector B = 
+1.0 2.0
+```
+
+// Work4
+```
+System.out.println(vectorA.calcDistance(vectorA, vectorB));
+```
+二点間の距離は、どちらか一方のベクトルに属する性質のものではなく、2つのベクトルの関係によって決定される。
+そのため、この処理は特定のインスタンス（＝主語）に依存していない。なのでStaticを宣言すべきである。

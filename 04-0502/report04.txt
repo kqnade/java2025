@@ -1,0 +1,125 @@
+4J 30番 百瀬 奏 テーマ04 レポート
+
+// 課題1
+```java
+public Vector2D(double x, double y) {
+    this.x = x;
+    this.y = y;
+}
+```
+```main.java
+public static void main(String[] args) {
+    try {
+        double x = Double.parseDouble(args[0]);
+        double y = Double.parseDouble(args[1]);
+    } catch (ArrayIndexOutOfBoundsException e) {
+        System.out.println("Please provide two arguments.");
+        return;
+    } catch (NumberFormatException e) {
+        System.out.println("Please provide valid numbers.");
+        return;
+    }
+    double x = Double.parseDouble(args[0]);
+    double y = Double.parseDouble(args[1]);
+    Vector2D vector = new Vector2D(x, y);
+
+    vector.print();
+}
+```
+```sh
+$ javac Vector2DApp.java
+$ javac Vector2D.java
+$ java Vector2DApp 1.0 1.0
+1.0 1.0
+```
+
+// 課題2
+```java
+public double normCalc() {
+    return Math.sqrt(x * x + y * y);
+}
+```
+```java
+public static void main(String[] args) {
+    double x, y;
+    Vector2D vector;
+
+    try {
+        x = Double.parseDouble(args[0]);
+        y = Double.parseDouble(args[1]);
+    } catch (ArrayIndexOutOfBoundsException e) {
+        System.out.println("Please provide two arguments.");
+        return;
+    } catch (NumberFormatException e) {
+        System.out.println("Please provide valid numbers.");
+        return;
+    }
+    vector = new Vector2D(x, y);
+
+    System.out.println("Norm: " + vector.normCalc());
+}
+```
+```sh
+$ javac Vector2DApp.java
+$ javac Vector2D.java
+$ java Vector2DApp 1.0 1.0
+1.0 1.0
+Norm: 1.4142135623730951
+```
+
+// 課題3
+c言語では引数を取ることで外部からの素材として扱うのに対して、Javaではメソッドがオブジェクト内の値に対して操作を行うことで値を返す。
+C言語では外部から引数が与えられ操作され値が返る。
+Javaではオブジェクト内にある値がメソッドによって処理され値が返る。
+Javaでのメソッドはフィールド値に付属するものであり、C言語にはない考え方である。
+
+// 課題4
+```java
+public void add(Vector2D InputVec) {
+    this.x += InputVec.x;
+    this.y += InputVec.y;
+}
+```
+
+```java
+public static void main(String[] args) {
+    double x, y;
+    double a, b;
+    Vector2D vectorA;
+    Vector2D vectorB;
+
+    try {
+        x = Double.parseDouble(args[0]);
+        y = Double.parseDouble(args[1]);
+        a = Double.parseDouble(args[2]);
+        b = Double.parseDouble(args[3]);
+    } catch (ArrayIndexOutOfBoundsException e) {
+        System.out.println("Please provide 4 numbers.");
+        return;
+    } catch (NumberFormatException e) {
+        System.out.println("Please provide valid numbers.");
+        return;
+    }
+    vectorA = new Vector2D(x, y);
+    vectorB = new Vector2D(a, b);
+
+    System.out.println("Vector A = ");
+    vectorA.print();
+    System.out.println("Vector B = ");
+    vectorB.print();
+    vectorA.add(vectorB);
+    System.out.println("Vector A + Vector B = ");
+    vectorA.print();
+}
+```
+```sh
+$ javac Verctor2DApp.java
+$ javac Vector2D.java
+$ java Vector2D 3 4 9 16
+Vector A = 
+3.0 4.0
+Vector B = 
+9.0 16.0
+Vector A + Vector B = 
+12.0 20.0
+```
