@@ -1,0 +1,90 @@
+4J 30番 百瀬 奏 テーマ06 レポート
+
+class Kadai01 {
+  static double calcArea(double width, double height){
+    double ans;
+    ans = (width * height)/2;
+    return ans;
+  }
+  public static void main(String[] args){
+    double arg0 = Double.parseDouble(args[0]);
+    double arg1 = Double.parseDouble(args[1]);
+
+    double answer = calcArea(arg0, arg1);
+
+    System.out.println(answer);
+  }
+}
+
+class Kadai02 {
+  public static double calcAverage(int a, int b, int c, int d, int e){
+    double average = (a+b+c+d+e)/5;
+    return average;
+  }
+  public static void main(String[] args){
+    int arg0 = Integer.parseInt(args[0]);
+    int arg1 = Integer.parseInt(args[1]);
+    int arg2 = Integer.parseInt(args[2]);
+    int arg3 = Integer.parseInt(args[3]);
+    int arg4 = Integer.parseInt(args[4]);
+
+    double average = calcAverage(arg0,arg1,arg2,arg3,arg4);
+
+    System.out.println(average);
+  }
+}
+
+class Kadai03 {
+  public static int isOdd(int num){
+    int modulo = num%2;
+    return modulo==0?0:1;
+  }
+  public static void main(String[] args){
+    int arg = Integer.parseInt(args[0]);
+
+    int isOdd = isOdd(arg);
+
+    System.out.println(isOdd);
+  }
+}
+
+class Kadai04 {
+  public static int isUnder18(int num){
+    return num>=10?0:1;
+  }
+  public static void main(String[] args){
+    int arg = Integer.parseInt(args[0]);
+
+    int result = isUnder18(arg);
+
+    System.out.println(result);
+  }
+}
+
+class MyPoint{
+  int x,y,z;
+
+  MyPoint(int x, int y, int z){
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  public void print(){
+    System.out.println(this.x);
+    System.out.println(this.y);
+    System.out.println(this.z);
+  }
+}
+
+class MyPointApp {
+  public static void main(String[] args){
+    int x = Integer.parseInt(args[0]);
+    int y = Integer.parseInt(args[1]);
+    int z = Integer.parseInt(args[2]);
+
+    MyPoint mp = new MyPoint(x, y, z);
+
+    mp.print();
+  }
+}
