@@ -1,0 +1,249 @@
+4J 30番 百瀬 奏 テーマ07 レポート
+
+コンストラクタ部
+Kosensei(int gakunen, String bunnya, String namae) {
+	this.gakunen = gakunen;
+	this.bunnya = bunnya;
+	this.namae = namae;
+}
+
+
+アプリケーション部
+class KosenseiApp {
+    public static void main(String[] args) {
+        Kosensei ryo = new Kosensei(2, "建築", "リョウ");
+        Kosensei yui = new Kosensei(3, "機械", "ユイ");
+
+        ryo.shokai();
+        yui.shokai();
+        Kosensei.shokai(ryo);
+        Kosensei.shokai(yui);
+    }
+}
+
+
+kosenseiクラス
+class Kosensei {
+    int gakunen;
+    String bunnya;
+    String namae;
+    String jukyo; // 追加
+
+    Kosensei(int gakunen, String bunnya, String namae, String jukyo) {
+        this.gakunen = gakunen;
+        this.bunnya = bunnya;
+        this.namae = namae;
+        this.jukyo = jukyo;
+    }
+
+    void shokai() {
+        System.out.println("私は" + this.gakunen + "年" + this.bunnya + "の" + this.namae + "です. 私の住居は" + this.jukyo + "です.");
+    }
+
+    static void shokai(Kosensei a) {
+        System.out.println("彼は" + a.gakunen + "年" + a.bunnya + "の" + a.namae + "さんです. 彼の住居は" + a.jukyo + "です.");
+    }
+}
+
+アプリケーション部
+class KosenseiApp {
+    public static void main(String[] args) {
+        Kosensei ryo = new Kosensei(2, "建築", "リョウ", "下宿");
+        Kosensei yui = new Kosensei(3, "機械", "ユイ", "学寮");
+
+        ryo.shokai();
+        yui.shokai();
+        Kosensei.shokai(ryo);
+        Kosensei.shokai(yui);
+    }
+}
+
+実行結果
+私は2年建築のリョウです. 私の住居は下宿です.
+私は3年機械のユイです. 私の住居は学寮です.
+彼は2年建築のリョウさんです. 彼の住居は下宿です.
+彼は3年機械のユイさんです. 彼の住居は学寮です.
+
+メソッド部
+void hantei(Kosensei other) {
+    if (this.jukyo.equals(other.jukyo)) {
+        System.out.println("私「" + this.namae + "」と「" + other.namae + "」さんは通学仲間です.");
+    } else {
+        System.out.println("私「" + this.namae + "」と「" + other.namae + "」さんは通学仲間ではありません.");
+    }
+}
+
+static void hantei(Kosensei a, Kosensei b) {
+    if (a.jukyo.equals(b.jukyo)) {
+        System.out.println("「" + a.namae + "」さんと「" + b.namae + "」さんは通学仲間です.");
+    } else {
+        System.out.println("「" + a.namae + "」さんと「" + b.namae + "」さんは通学仲間ではありません.");
+    }
+}
+
+アプリケーション部
+class KosenseiApp {
+    public static void main(String[] args) {
+        Kosensei ryo = new Kosensei(2, "建築", "リョウ", "下宿");
+        Kosensei yui = new Kosensei(3, "機械", "ユイ", "学寮");
+        Kosensei kensuke = new Kosensei(3, "機械", "ケンスケ", "学寮");
+
+        ryo.shokai();
+        yui.shokai();
+        ryo.hantei(yui);
+        Kosensei.hantei(ryo, yui);
+
+        kensuke.shokai();
+        kensuke.hantei(yui);
+        Kosensei.hantei(kensuke, yui);
+    }
+}
+
+実行例
+私は2年建築のリョウです. 私の住居は下宿です.
+私は3年機械のユイです. 私の住居は学寮です.
+私「リョウ」と「ユイ」さんは通学仲間ではありません.
+「リョウ」さんと「ユイ」さんは通学仲間ではありません.
+私は3年機械のケンスケです. 私の住居は学寮です.
+私「ケンスケ」と「ユイ」さんは通学仲間です.
+「ケンスケ」さんと「ユイ」さんは通学仲間です.
+
+メソッド部
+void shinkyu() {
+    this.gakunen += 1;
+    System.out.println("私は" + this.gakunen + "年に進級しました!");
+}
+
+static void shinkyu(Kosensei a) {
+    a.gakunen += 1;
+    System.out.println(a.namae + "さんは" + a.gakunen + "年に進級しました!");
+}
+
+アプリケーション部
+class KosenseiApp {
+    public static void main(String[] args) {
+        Kosensei ryo = new Kosensei(2, "建築", "リョウ", "下宿");
+        Kosensei yui = new Kosensei(3, "機械", "ユイ", "学寮");
+        Kosensei kensuke = new Kosensei(3, "機械", "ケンスケ", "学寮");
+
+        ryo.shokai();
+        yui.shokai();
+        ryo.hantei(yui);
+        Kosensei.hantei(ryo, yui);
+
+        kensuke.shokai();
+        kensuke.hantei(yui);
+        Kosensei.hantei(kensuke, yui);
+
+        ryo.shinkyu();
+        ryo.shokai();
+        Kosensei.shinkyu(yui);
+        yui.shokai();
+    }
+}
+
+実行例
+私は2年建築のリョウです. 私の住居は下宿です.
+私は3年機械のユイです. 私の住居は学寮です.
+私「リョウ」と「ユイ」さんは通学仲間ではありません.
+「リョウ」さんと「ユイ」さんは通学仲間ではありません.
+私は3年機械のケンスケです. 私の住居は学寮です.
+私「ケンスケ」と「ユイ」さんは通学仲間です.
+「ケンスケ」さんと「ユイ」さんは通学仲間です.
+私は3年に進級しました!
+私は3年建築のリョウです. 私の住居は下宿です.
+ユイさんは4年に進級しました!
+私は4年機械のユイです. 私の住居は学寮です.
+
+非staticの場合、自分が自分のフィールド値にアクセスすることで進級できている→自分が進級させる
+staticの場合、誰かが指定した生徒のフィールド値にアクセスすることで進級している→誰かが進級させる
+誰がその操作を行うかに違いがある・
+
+
+import java.util.Random;
+public class Dice {
+    private int sides;         // 面数
+    private int lastRoll;      // 最後の出目
+    private int totalRolls;    // 振った回数
+    private int sumOfRolls;    // 出目の合計
+    private Random random;
+    public Dice(int sides) {
+        if (sides < 1) {
+            throw new IllegalArgumentException("面の数は1以上である必要があります。");
+        }
+        this.sides = sides;
+        this.random = new Random();
+        this.lastRoll = 0;
+        this.totalRolls = 0;
+        this.sumOfRolls = 0;
+    }
+
+    public int roll() {
+        lastRoll = random.nextInt(sides) + 1;
+        totalRolls++;
+        sumOfRolls += lastRoll;
+        return lastRoll;
+    }
+
+    public int getLastRoll() {
+        return lastRoll;
+    }
+
+    public int getTotalRolls() {
+        return totalRolls;
+    }
+
+    public int getSumOfRolls() {
+        return sumOfRolls;
+    }
+
+    public double getAverage() {
+        if (totalRolls == 0) return 0.0;
+        return (double) sumOfRolls / totalRolls;
+    }
+
+    public void reset() {
+        lastRoll = 0;
+        totalRolls = 0;
+        sumOfRolls = 0;
+    }
+
+}
+
+class DiceApp {
+public static void main(String[] args) {
+        Dice dice = new Dice(6);
+        for (int i = 0; i < 100; i++) {
+            int result = dice.roll();
+            System.out.println("出目: " + result);
+        }
+
+        System.out.println("合計: " + dice.getSumOfRolls());
+        System.out.println("回数: " + dice.getTotalRolls());
+        System.out.println("平均: " + dice.getAverage());
+    }
+}
+
+
+出目: 3
+...
+...
+出目: 4
+出目: 3
+出目: 2
+出目: 2
+出目: 1
+出目: 6
+出目: 2
+出目: 1
+出目: 1
+出目: 3
+出目: 1
+出目: 4
+出目: 4
+合計: 325
+回数: 100
+平均: 3.25
+
+サイコロを振り、その回数、数値合計、平均を知ることができるクラス及びアプリケーション。
+
