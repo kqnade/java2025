@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Set;
 
 class Kosensei {
     private int gakunen;
