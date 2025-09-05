@@ -1,0 +1,215 @@
+4J 30番 百瀬 奏 テーマ09 レポート
+
+```java name=Kosensei.java
+public class Kosensei {
+    // ---- Fields ----
+    private int gakunen;      // 学年
+    private String bunnya;    // 分野
+    private String namae;     // 名前
+
+    // ---- Constructor ----
+    public Kosensei(int gakunen, String bunnya, String namae) {
+        this.gakunen = gakunen;
+        this.bunnya = bunnya;
+        this.namae = namae;
+    }
+
+    // ---- Getters ----
+    public int getGakunen() {
+        return this.gakunen;
+    }
+
+    public String getBunnya() {
+        return this.bunnya;
+    }
+
+    public String getNamae() {
+        return this.namae;
+    }
+
+    // ---- Method ----
+    public void shokai() {
+        System.out.println("学年: " + this.gakunen);
+        System.out.println("分野: " + this.bunnya);
+        System.out.println("名前: " + this.namae);
+    }
+}
+```
+
+```java name=KosenseiApp.java
+public class KosenseiApp {
+    public static void main(String[] args) {
+        // Kosenseiクラスの動作テスト
+        Kosensei student = new Kosensei(2, "情報工学", "田中太郎");
+        student.shokai();
+    }
+}
+```
+
+```shell
+学年: 2
+分野: 情報工学
+名前: 田中太郎
+```
+
+```java name=Tsusei.java
+public class Tsusei extends Kosensei {
+    // ---- Field ----
+    private String kotsu;     // 交通手段
+
+    // ---- Constructor ----
+    public Tsusei(int gakunen, String bunnya, String namae, String kotsu) {
+        super(gakunen, bunnya, namae);
+        this.kotsu = kotsu;
+    }
+
+    // ---- Getter ----
+    public String getKotsu() {
+        return this.kotsu;
+    }
+
+    // ---- Overridden Method: shokai() ----
+    @Override
+    public void shokai() {
+        // 学年、分野、名前、交通手段を1行で表示
+        System.out.println(
+            "学年: " + getGakunen() +
+            " 分野: " + getBunnya() +
+            " 名前: " + getNamae() +
+            " 交通手段: " + this.kotsu
+        );
+    }
+}
+```
+
+```java name=TsuseiApp.java
+public class TsuseiApp {
+    public static void main(String[] args) {
+        // Tsuseiクラスの動作テスト
+        Tsusei commuter = new Tsusei(3, "機械工学", "佐藤花子", "バス");
+        commuter.shokai();
+    }
+}
+```
+
+```
+学年: 3 分野: 機械工学 名前: 佐藤花子 交通手段: バス
+```
+
+```java name=Ryosei.java
+public class Ryosei extends Kosensei {
+    // ---- Field ----
+    private Ryosei doshitsusha;  // 同室者
+
+    // ---- Constructor ----
+    public Ryosei(int gakunen, String bunnya, String namae) {
+        super(gakunen, bunnya, namae);
+        this.doshitsusha = null;
+    }
+
+    // ---- Getter ----
+    public Ryosei getDoshitsusha() {
+        return this.doshitsusha;
+    }
+
+    // ---- Setter ----
+    public void setDoshitsusha(Ryosei doshitsusha) {
+        this.doshitsusha = doshitsusha;
+    }
+
+    // ---- Overridden Method: shokai() ----
+    @Override
+    public void shokai() {
+        String partner = (this.doshitsusha == null) ? "なし" : this.doshitsusha.getNamae();
+        System.out.println(
+            "学年: " + getGakunen() +
+            " 分野: " + getBunnya() +
+            " 名前: " + getNamae() +
+            " 同室者: " + partner
+        );
+    }
+}
+```
+
+```java name=RyoseiApp.java
+public class RyoseiApp {
+    public static void main(String[] args) {
+        // 基本版のRyoseiのテスト
+        Ryosei r1 = new Ryosei(1, "電気電子", "鈴木一郎");
+        Ryosei r2 = new Ryosei(2, "情報工学", "山田次郎");
+
+        // 相互にセット（手動設定）
+        r1.setDoshitsusha(r2);
+        r2.setDoshitsusha(r1);
+
+        r1.shokai();
+        System.out.println("--------------------------------");
+        r2.shokai();
+    }
+}
+```
+```
+学年: 1 分野: 電気電子 名前: 鈴木一郎 同室者: 山田次郎
+--------------------------------
+学年: 2 分野: 情報工学 名前: 山田次郎 同室者: 鈴木一郎
+```
+
+```java name=Ryosei.java
+// 強化版: 同室者のsetterで相互設定を自動実現
+public class Ryosei extends Kosensei {
+    private Ryosei doshitsusha;
+
+    public Ryosei(int gakunen, String bunnya, String namae) {
+        super(gakunen, bunnya, namae);
+        this.doshitsusha = null;
+    }
+
+    public Ryosei getDoshitsusha() {
+        return this.doshitsusha;
+    }
+
+    public void setDoshitsusha(Ryosei doshitsusha) {
+        this.doshitsusha = doshitsusha;
+        // 引数側の同室者も自動的に設定
+        doshitsusha.doshitsusha = this;
+    }
+
+    @Override
+    public void shokai() {
+        String partner = (this.doshitsusha == null) ? "なし" : this.doshitsusha.getNamae();
+        System.out.println(
+            "学年: " + getGakunen() +
+            " 分野: " + getBunnya() +
+            " 名前: " + getNamae() +
+            " 同室者: " + partner
+        );
+    }
+}
+```
+
+```java name=RyoseiMutualApp.java
+public class RyoseiMutualApp {
+    public static void main(String[] args) {
+        // 強化版のRyoseiの動作テスト: 片方のみセットで相互に設定されることを確認
+        Ryosei a = new Ryosei(1, "生物工学", "伊藤四郎");
+        Ryosei b = new Ryosei(2, "化学", "佐々木五郎");
+
+        a.setDoshitsusha(b);
+
+        System.out.println("=== Ryosei Mutual Test ===");
+        System.out.println("a の同室者: " + a.getDoshitsusha().getNamae());
+        System.out.println("b の同室者: " + b.getDoshitsusha().getNamae());
+    }
+}
+```
+```
+=== Ryosei Mutual Test ===
+a の同室者: 伊藤四郎
+b の同室者: 伊藤四郎
+```
+
+
+
+
+
+

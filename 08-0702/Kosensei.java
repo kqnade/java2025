@@ -6,6 +6,8 @@ class Kosensei {
     private String namae;
     private String jukyo; // 追加
 
+    private Sumaho sumaho; // スマホフィールド
+
     private static final Set<String> VALID_MAJORS = Set.of("情報", "機械", "電気", "電子", "建築");
 
     public Kosensei() {
@@ -13,10 +15,16 @@ class Kosensei {
         this.bunnya = "null";
         this.namae = "null";
         this.jukyo = "null";
+        this.sumaho = null; // コンストラクタでnull代入
     }
 
     public void getProfile() {
-        System.out.println("私は" + this.gakunen + "年" + this.bunnya + "の" + this.namae + "です. 私の住居は" + this.jukyo + "です.");
+        System.out.print("私は" + this.gakunen + "年" + this.bunnya + "の" + this.namae + "です. 私の住居は" + this.jukyo + "です.");
+        if (this.sumaho != null) {
+            System.out.println(" 私のスマホは" + this.sumaho.getNamae() + "です.");
+        } else {
+            System.out.println(" 私はスマホを持っていません.");
+        }
     }
     public int getGakunen(){
         return this.gakunen;
@@ -25,10 +33,10 @@ class Kosensei {
         return this.namae;
     }
     public String getBunnya(){
-        return this.namae;
+        return this.bunnya;
     }
     public String getJukyo(){
-        return this.namae;
+        return this.jukyo;
     }
 
     public void setInformation(int gakunen, String bunnya, String namae, String jukyo){
@@ -44,5 +52,15 @@ class Kosensei {
         }
         this.namae = namae;
         this.jukyo = jukyo;
+    }
+
+    // スマホセッター
+    public void setSumaho(Sumaho sumaho) {
+        this.sumaho = sumaho;
+    }
+
+    // スマホゲッター
+    public Sumaho getSumaho() {
+        return this.sumaho;
     }
 }

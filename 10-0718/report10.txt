@@ -1,0 +1,59 @@
+IS-A関係
+Car IS-A Vehicle
+ElectricCar IS-A Car
+
+```java
+class Vehicle {
+    private String name;
+    private int maxSpeed;
+
+    public Vehicle(String name, int maxSpeed) {
+        this.name = name;
+        this.maxSpeed = maxSpeed;
+    }
+
+    public String info() {
+        return "Vehicle: " + name + ", Max speed: " + maxSpeed + "km/h";
+    }
+}
+
+class Car extends Vehicle {
+    private int numDoors;
+
+    public Car(String name, int maxSpeed, int numDoors) {
+        super(name, maxSpeed);
+        this.numDoors = numDoors;
+    }
+
+    @Override
+    public String info() {
+        return "Car: " + super.info().substring(9) + ", Doors: " + numDoors;
+    }
+}
+
+class ElectricCar extends Car {
+    private int batteryCapacity;
+
+    public ElectricCar(String name, int maxSpeed, int numDoors, int batteryCapacity) {
+        super(name, maxSpeed, numDoors);
+        this.batteryCapacity = batteryCapacity;
+    }
+
+    @Override
+    public String info() {
+        return "ElectricCar: " + super.info().substring(5) + ", Battery: " + batteryCapacity + "kWh";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Vehicle v = new Vehicle("Bicycle", 25);
+        Car c = new Car("Sedan", 180, 4);
+        ElectricCar e = new ElectricCar("Tesla Model 3", 225, 4, 75);
+
+        System.out.println(v.info());
+        System.out.println(c.info());
+        System.out.println(e.info());
+    }
+}
+

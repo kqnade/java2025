@@ -1,0 +1,214 @@
+4J 30番 百瀬 奏 テーマ08 レポート
+
+import java.util.Set;
+
+class Kosensei {
+    private int gakunen;
+    private String bunnya;
+    private String namae;
+    private String jukyo; // 追加
+
+    private static final Set<String> VALID_MAJORS = Set.of("情報", "機械", "電気", "電子", "建築");
+
+    public Kosensei() {
+        this.gakunen = 0;
+        this.bunnya = "null";
+        this.namae = "null";
+        this.jukyo = "null";
+    }
+
+    public void getProfile() {
+        System.out.println("私は" + this.gakunen + "年" + this.bunnya + "の" + this.namae + "です. 私の住居は" + this.jukyo + "です.");
+    }
+    public int getGakunen(){
+        return this.gakunen;
+    }
+    public String getNamae(){
+        return this.namae;
+    }
+    public String getBunnya(){
+        return this.namae;
+    }
+    public String getJukyo(){
+        return this.namae;
+    }
+
+    public void setInformation(int gakunen, String bunnya, String namae, String jukyo){
+        if (0 < gakunen && gakunen < 6){
+            this.gakunen = gakunen;
+        } else {
+            throw new IllegalArgumentException("無効なgakunenです: " + gakunen);
+        }
+        if (VALID_MAJORS.contains(bunnya)) {
+            this.bunnya = bunnya;
+        } else {
+            throw new IllegalArgumentException("無効な専攻です: " + bunnya);
+        }
+        this.namae = namae;
+        this.jukyo = jukyo;
+    }
+}
+
+class Sumaho {
+    private String namae;      // スマホの名前
+    private double screenSize; // 画面サイズ（インチ）
+    private int memoryGB;      // メモリ容量（GB）
+
+    // コンストラクタ
+    public Sumaho(String namae, double screenSize, int memoryGB) {
+        setNamae(namae);
+        setScreenSize(screenSize);
+        setMemoryGB(memoryGB);
+    }
+
+    public String getNamae() {
+        return namae;
+    }
+    public void setNamae(String namae) {
+        if (namae == null || namae.isEmpty()) {
+            throw new IllegalArgumentException("名前は空にできません");
+        }
+        this.namae = namae;
+    }
+
+    public double getScreenSize() {
+        return screenSize;
+    }
+    public void setScreenSize(double screenSize) {
+        if (screenSize < 3.0 || screenSize > 7.0) {
+            throw new IllegalArgumentException("画面サイズは3.0〜7.0インチのみです");
+        }
+        this.screenSize = screenSize;
+    }
+
+    public int getMemoryGB() {
+        return memoryGB;
+    }
+    public void setMemoryGB(int memoryGB) {
+        if (memoryGB < 1 || memoryGB > 16) {
+            throw new IllegalArgumentException("メモリ容量は1〜16GBのみです");
+        }
+        this.memoryGB = memoryGB;
+    }
+
+    public void printInfo() {
+        System.out.println("スマホ名: " + namae +
+                           ", 画面サイズ: " + screenSize + "インチ" +
+                           ", メモリ: " + memoryGB + "GB");
+    }
+}
+
+public class SumahoTest {
+    public static void main(String[] args) {
+        // 正常系テスト
+        Sumaho s1 = new Sumaho("Galaxy S24", 6.2, 8);
+        Sumaho s2 = new Sumaho("iPhone SE", 4.7, 4);
+
+        s1.printInfo();
+        s2.printInfo();
+
+        try {
+            Sumaho s3 = new Sumaho("Xperia", 8.1, 4); // 画面サイズが大きすぎ
+        } catch (IllegalArgumentException e) {
+            System.out.println("異常系テスト1: " + e.getMessage());
+        }
+        try {
+            Sumaho s4 = new Sumaho("Pixel", 6.0, 32); // メモリが大きすぎ
+        } catch (IllegalArgumentException e) {
+            System.out.println("異常系テスト2: " + e.getMessage());
+        }
+        try {
+            Sumaho s5 = new Sumaho("", 5.5, 4); // 名前空
+        } catch (IllegalArgumentException e) {
+            System.out.println("異常系テスト3: " + e.getMessage());
+        }
+    }
+}
+
+
+import java.util.Set;
+
+class Kosensei {
+    private int gakunen;
+    private String bunnya;
+    private String namae;
+    private String jukyo; // 追加
+
+    private Sumaho sumaho; // スマホフィールド
+
+    private static final Set<String> VALID_MAJORS = Set.of("情報", "機械", "電気", "電子", "建築");
+
+    public Kosensei() {
+        this.gakunen = 0;
+        this.bunnya = "null";
+        this.namae = "null";
+        this.jukyo = "null";
+        this.sumaho = null; // コンストラクタでnull代入
+    }
+
+    public void getProfile() {
+        System.out.print("私は" + this.gakunen + "年" + this.bunnya + "の" + this.namae + "です. 私の住居は" + this.jukyo + "です.");
+        if (this.sumaho != null) {
+            System.out.println(" 私のスマホは" + this.sumaho.getNamae() + "です.");
+        } else {
+            System.out.println(" 私はスマホを持っていません.");
+        }
+    }
+    public int getGakunen(){
+        return this.gakunen;
+    }
+    public String getNamae(){
+        return this.namae;
+    }
+    public String getBunnya(){
+        return this.bunnya;
+    }
+    public String getJukyo(){
+        return this.jukyo;
+    }
+
+    public void setInformation(int gakunen, String bunnya, String namae, String jukyo){
+        if (0 < gakunen && gakunen < 6){
+            this.gakunen = gakunen;
+        } else {
+            throw new IllegalArgumentException("無効なgakunenです: " + gakunen);
+        }
+        if (VALID_MAJORS.contains(bunnya)) {
+            this.bunnya = bunnya;
+        } else {
+            throw new IllegalArgumentException("無効な専攻です: " + bunnya);
+        }
+        this.namae = namae;
+        this.jukyo = jukyo;
+    }
+
+    // スマホセッター
+    public void setSumaho(Sumaho sumaho) {
+        this.sumaho = sumaho;
+    }
+
+    // スマホゲッター
+    public Sumaho getSumaho() {
+        return this.sumaho;
+    }
+}
+
+私は0年nullのnullです. 私の住居はnullです. 私はスマホを持っていません.
+私は0年nullのnullです. 私の住居はnullです. 私のスマホはAQUOSです.
+java.lang.IllegalArgumentException: 無効なgakunenです: 10
+私は0年nullのnullです. 私の住居はnullです. 私のスマホはAQUOSです.
+
+
+
+`static`フィールド（クラス変数）は、クラスごとに作られる変数であり、そのクラスの全てのインスタンスで値が共有されます。インスタンスごとに異なる値を持つ通常のフィールド（インスタンス変数）とは異なり、全体で共通の情報を保持するのに適しています。クラス名を使ってアクセスでき、インスタンスを生成せずとも利用できます。
+**インスタンスの個数をカウントする**  
+  例）オブジェクトが生成されるたびにstaticフィールドを増やすことで、クラス全体で何個のインスタンスがあるかを管理できる。
+**定数の定義**  
+  例）`public static final double PI = 3.14159;`のように、全体で共通の定数を宣言できる。
+**共通設定やリソースの共有**  
+  例）アプリ内で共通の設定値やリスト、キャッシュなどを保存するのに使われる。
+  
+- ページタイトル：「Javaのstaticについて」  
+- URL：https://www.milk-island.net/document/java/kihon/g2/  
+- アクセス日：2025年7月11日
+
