@@ -1,3 +1,8 @@
+4J 30番 百瀬 奏 テーマ10 レポート
+
+Changelog
+- 0905 レポートタイトルがテキスト内に存在しなかったため追加
+
 IS-A関係
 Car IS-A Vehicle
 ElectricCar IS-A Car
