@@ -1,0 +1,227 @@
+4J 30番 百瀬 奏 テーマ11 レポート
+
+課題１
+- 最大要素数 saidai = 5
+- int配列 a をコンストラクタで new
+- 実際の要素数 jissai を管理
+- add / size / get / print 実装
+- いっぱいのときはエラーメッセージ表示
+
+ソースコード
+public class ArrayListInt {
+    private int saidai;   // 最大の要素数 (capacity)
+    private int[] a;      // 配列本体
+    private int jissai;   // 実際の要素数 (size)
+
+    public ArrayListInt() {
+        this.saidai = 5;
+        this.a = new int[this.saidai];
+        this.jissai = 0;
+    }
+
+    public void add(int x) {
+        if (this.jissai >= this.saidai) {
+            System.out.println("[ArrayListInt エラー] これ以上追加できません (capacity=" + this.saidai + ")");
+            return;
+        }
+        this.a[this.jissai] = x;
+        this.jissai++;
+    }
+
+    public int size() {
+        return this.jissai;
+    }
+
+    public int get(int idx) {
+        if (idx < 0 || idx >= this.jissai) {
+            System.out.println("[ArrayListInt エラー] 不正なインデックス: " + idx);
+            return 0;
+        }
+        return this.a[idx];
+    }
+
+    public void print() {
+        System.out.print("ArrayListInt: [");
+        for (int i = 0; i < this.jissai; i++) {
+            System.out.print(this.a[i]);
+            if (i != this.jissai - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("] (size=" + this.jissai + " / capacity=" + this.saidai + ")");
+    }
+}
+
+public class ArrayListIntApp {
+    public static void main(String[] args) {
+        System.out.println("===== ArrayListInt テスト =====");
+        ArrayListInt list = new ArrayListInt();
+
+        list.add(314);
+        list.add(271);
+        list.add(173);
+        list.add(256);
+        list.add(999);
+
+        // 一杯になった後の追加 (エラー確認)
+        list.add(123);
+
+        list.print();
+
+        // getテスト
+        System.out.println("size = " + list.size());
+        System.out.println("get(0) = " + list.get(0));
+        System.out.println("get(2) = " + list.get(2));
+        System.out.println("get(4) = " + list.get(4));
+
+        // 範囲外
+        System.out.println("get(5) = " + list.get(5));
+    }
+}
+
+実行結果例
+===== ArrayListInt テスト =====
+[ArrayListInt エラー] これ以上追加できません (capacity=5)   ← 6個目の追加で表示
+ArrayListInt: [314, 271, 173, 256, 999] (size=5 / capacity=5)
+size = 5
+get(0) = 314
+get(2) = 173
+get(4) = 999
+[ArrayListInt エラー] 不正なインデックス: 5
+get(5) = 0
+
+課題２
+- 最大人数 saidai = 5
+- Kosensei[] a をコンストラクタで new
+- 実際の人数 jissai
+- add / size / get / shokai 実装
+- Kosensei（スーパークラス）の参照配列に Tsusei, Ryosei を混在
+
+ソースコード
+public class Gakkyu {
+    // ---- フィールド ----
+    private int saidai;        // 最大人数
+    private Kosensei[] a;      // 高専生参照配列
+    private int jissai;        // 実際の人数
+
+    // ---- コンストラクタ ----
+    public Gakkyu() {
+        this.saidai = 5;
+        this.a = new Kosensei[this.saidai];
+        this.jissai = 0;
+    }
+
+    // ---- 追加 ----
+    public void add(Kosensei s) {
+        if (this.jissai >= this.saidai) {
+            System.out.println("[Gakkyu エラー] これ以上追加できません (capacity=" + this.saidai + ")");
+            return;
+        }
+        this.a[this.jissai] = s;
+        this.jissai++;
+    }
+
+    // ---- 実際の人数 ----
+    public int size() {
+        return this.jissai;
+    }
+
+    // ---- 指定番号の高専生取得 ----
+    public Kosensei get(int idx) {
+        if (idx < 0 || idx >= this.jissai) {
+            System.out.println("[Gakkyu エラー] 不正なインデックス: " + idx);
+            return null;
+        }
+        return this.a[idx];
+    }
+
+    // ---- 全員自己紹介 ----
+    public void shokai() {
+        System.out.println("=== 学級自己紹介 (" + this.jissai + "人) ===");
+        for (int i = 0; i < this.jissai; i++) {
+            this.a[i].shokai();
+            System.out.println("------------------------------");
+        }
+    }
+}
+
+public class GakkyuApp {
+    public static void main(String[] args) {
+        System.out.println("===== Gakkyu テスト =====");
+        Gakkyu g = new Gakkyu();
+
+        // 通学生 (Tsusei)
+        Tsusei t1 = new Tsusei(3, "機械工学", "佐藤花子", "バス");
+        Tsusei t2 = new Tsusei(2, "情報工学", "田中太郎", "自転車");
+        Tsusei t3 = new Tsusei(1, "建築学", "高橋光", "徒歩");
+
+        // 寮生 (Ryosei)
+        Ryosei r1 = new Ryosei(1, "電気電子", "鈴木一郎");
+        Ryosei r2 = new Ryosei(2, "情報工学", "山田次郎");
+        // 同室設定
+        r1.setDoshitsusha(r2);
+        r2.setDoshitsusha(r1);
+
+        // 追加 (スーパークラスのKosenseiは直接追加しない)
+        g.add(t1);
+        g.add(r1);
+        g.add(t2);
+        g.add(r2);
+        g.add(t3);
+
+        // 満杯後の追加 (エラー確認)
+        g.add(new Tsusei(4, "物質工学", "中村空", "電車"));
+
+        // 全員自己紹介
+        g.shokai();
+
+        // 個別取得テスト
+        System.out.println("インデックス2番の学生:");
+        Kosensei s = g.get(2);
+        if (s != null) {
+            s.shokai();
+        }
+
+        // 範囲外取得
+        System.out.println("インデックス5番の学生(存在しない):");
+        g.get(5);
+    }
+}
+
+3. 実行結果例
+===== Gakkyu テスト =====
+[Gakkyu エラー] これ以上追加できません (capacity=5)    ← 満杯後の追加
+=== 学級自己紹介 (5人) ===
+学年: 3 分野: 機械工学 名前: 佐藤花子 交通手段: バス
+------------------------------
+学年: 1 分野: 電気電子 名前: 鈴木一郎 同室者: 山田次郎
+------------------------------
+学年: 2 分野: 情報工学 名前: 田中太郎 交通手段: 自転車
+------------------------------
+学年: 2 分野: 情報工学 名前: 山田次郎 同室者: 鈴木一郎
+------------------------------
+学年: 1 分野: 建築学 名前: 高橋光 交通手段: 徒歩
+------------------------------
+インデックス2番の学生:
+学年: 2 分野: 情報工学 名前: 田中太郎 交通手段: 自転車
+インデックス5番の学生(存在しない):
+[Gakkyu エラー] 不正なインデックス: 5
+
+課題3
+
+(1) 現象
+学級クラス Gakkyu の shokai メソッドでは、
+   this.a[i].shokai();
+と、配列の型（Kosensei）で宣言された参照経由で呼び出している。
+Kosensei クラスの shokai が呼ばれそうだが、実際の出力には
+  - 通学生の場合: 「交通手段: 〜」
+  - 寮生の場合: 「同室者: 〜」
+といったサブクラスでオーバーライドした内容が表示されている。
+つまり、配列の静的型（Kosensei）ではなく、要素に格納されている実際のインスタンスの型に応じてメソッドが選ばれている。
+
+(2) 理由
+Java ではインスタンスメソッド呼び出しが「動的に結び付け」られる（実行時に実際のオブジェクトの型を調べる）ため、
+Kosensei 型参照であっても Tsusei / Ryosei のオーバーライド済み shokai メソッドが呼び出される。
+
+(3) 機能名
+オーバーライド (override)
