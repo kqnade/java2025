@@ -1,0 +1,67 @@
+4J 30番 百瀬 奏 テーマ13 レポート
+
+1. AppTest1〜AppTest3を作成・実行し、開発者視点で感じたこと:
+- JFrameやJButtonなどの標準クラスを継承・利用することで、非常に少ないコード量でGUIアプリケーションの基礎が作れる点。
+- イベント駆動型のプログラム（ActionListenerの仕組み）が直観的で、GUI部品の反応を柔軟に指定できる点
+- Javaの大文字小文字区別やスペルミスがそのままエラーになる
+
+2. JButtonのsetTextメソッド調査・AppTest4改造について:
+- 調査結果:
+    - JButtonクラスのsetText(String text)メソッドは、ボタンに表示されるテキストを動的に変更するためのメソッドです。
+    - 公式API: https://docs.oracle.com/javase/jp/8/docs/api/javax/swing/AbstractButton.html#setText-java.lang.String-
+- where: actionPerformedメソッド内
+- how: `this.button.setText("押されたよ！");`を追加
+- why: イベントが発生した時にボタンの表示を即座に変えたいから。actionPerformedはイベント時の処理を書く場所だから。
+
+3. AppTest5
+```java
+import java.awt.event.*;
+import javax.swing.*;
+
+public class AppTest5 extends JFrame implements ActionListener {
+    private JButton button;
+    private JButton button2;
+    private JLabel label;
+
+    public AppTest5() {
+        super();
+        // super.getContentPane().add(this.button); // nullレイアウトでは不要
+
+        super.getContentPane().setLayout(null);
+
+        this.button = new JButton("押してね☆");
+        this.button.setBounds(50, 50, 120, 40);
+        super.getContentPane().add(this.button);
+        this.button.addActionListener(this);
+
+        this.button2 = new JButton("こっちも押して");
+        this.button2.setBounds(200, 50, 150, 40);
+        super.getContentPane().add(this.button2);
+        this.button2.addActionListener(this);
+
+        this.label = new JLabel("ラベルです");
+        this.label.setBounds(120, 150, 120, 30);
+        super.getContentPane().add(this.label);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.button) {
+            this.button.setText("押された！");
+            this.label.setText("左ボタンが押されました");
+        } else if (e.getSource() == this.button2) {
+            this.button2.setText("押された！");
+            this.label.setText("右ボタンが押されました");
+        }
+    }
+
+    public static void main(String[] args) {
+        AppTest5 a = new AppTest5();
+        a.setSize(400, 300);
+        a.setLocation(100, 100);
+        a.setVisible(true);
+    }
+}
+```
+
+4. GUIプログラムを初めて作った感想・疑問点・今後やりたいこと
+- GUI部品の配置やサイズ調整など、思い通りにレイアウトするのが難しいと感じた。
