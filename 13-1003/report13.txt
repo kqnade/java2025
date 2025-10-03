@@ -49,7 +49,7 @@ public class AppTest5 extends JFrame implements ActionListener {
             this.button.setText("押された！");
             this.label.setText("左ボタンが押されました");
         } else if (e.getSource() == this.button2) {
-            this.button2.setText("押された！");
+            this.button2.setText("押された！！");
             this.label.setText("右ボタンが押されました");
         }
     }
