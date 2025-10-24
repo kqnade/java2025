@@ -1,1 +1,9 @@
 .direnv/
+.github/credentials
+.github/*credential*
+.github/*token*
+.github/*secret*
+*.pem
+*.key
+.env
+.env.*

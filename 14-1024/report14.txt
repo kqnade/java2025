@@ -1,0 +1,259 @@
+4J 30番 百瀬 奏 テーマ14 レポート
+
+【課題1】FlowLayoutを利用したプログラム
+
+ソースコード(FlowTest.java):
+---
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+
+public class FlowTest extends JFrame {
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JLabel label1;
+    
+    public FlowTest(String title) {
+        super(title);
+        
+        // 部品の初期化
+        this.button1 = new JButton("ボタン1");
+        this.button2 = new JButton("ボタン2");
+        this.button3 = new JButton("ボタン3");
+        this.label1 = new JLabel("FlowLayoutのテスト");
+        
+        // パネルとレイアウトマネージャの設定
+        JPanel panel1 = new JPanel();
+        FlowLayout flow1 = new FlowLayout();
+        panel1.setLayout(flow1);
+        
+        // パネルに部品を追加
+        panel1.add(this.label1);
+        panel1.add(this.button1);
+        panel1.add(this.button2);
+        panel1.add(this.button3);
+        
+        // contentPaneにパネルを追加
+        super.getContentPane().add(panel1);
+        
+        // ウィンドウの設定
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setSize(400, 150);
+        super.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        new FlowTest("FlowLayoutテスト");
+    }
+}
+---
+
+【課題2】BorderLayoutを利用したプログラム
+
+ソースコード(BorderTest.java):
+---
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+
+public class BorderTest extends JFrame {
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JLabel label1;
+    
+    public BorderTest(String title) {
+        super(title);
+        
+        // 部品の初期化
+        this.button1 = new JButton("左ボタン");
+        this.button2 = new JButton("右ボタン");
+        this.button3 = new JButton("上ボタン");
+        this.label1 = new JLabel("BorderLayoutのテスト");
+        
+        // パネルとレイアウトマネージャの設定
+        JPanel panel1 = new JPanel();
+        BorderLayout border1 = new BorderLayout();
+        panel1.setLayout(border1);
+        
+        // パネルに部品を追加
+        panel1.add(this.button1, BorderLayout.WEST);
+        panel1.add(this.button2, BorderLayout.EAST);
+        panel1.add(this.button3, BorderLayout.NORTH);
+        panel1.add(this.label1, BorderLayout.SOUTH);
+        
+        // contentPaneにパネルを追加
+        super.getContentPane().add(panel1);
+        
+        // ウィンドウの設定
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setSize(400, 200);
+        super.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        new BorderTest("BorderLayoutテスト");
+    }
+}
+---
+
+配置説明:
+- WEST(左): button1 (「左ボタン」)
+- EAST(右): button2 (「右ボタン」)
+- NORTH(上): button3 (「上ボタン」)
+- SOUTH(下): label1 (「BorderLayoutのテスト」)
+
+【課題3】入れ子のパネルを利用した複雑なレイアウト
+
+ソースコード(ComplexTest.java):
+---
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+
+public class ComplexTest extends JFrame {
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JLabel label1;
+    private JLabel label2;
+    
+    public ComplexTest(String title) {
+        super(title);
+        
+        // 部品の初期化
+        this.button1 = new JButton("ボタン1");
+        this.button2 = new JButton("ボタン2");
+        this.button3 = new JButton("ボタン3");
+        this.button4 = new JButton("実行");
+        this.label1 = new JLabel("タイトル");
+        this.label2 = new JLabel("ステータスバー");
+        
+        // パネル2の作成(FlowLayoutで横並び)
+        JPanel panel2 = new JPanel();
+        FlowLayout flow1 = new FlowLayout();
+        panel2.setLayout(flow1);
+        panel2.add(this.button1);
+        panel2.add(this.button2);
+        panel2.add(this.button3);
+        
+        // パネル1の作成(BorderLayoutで配置)
+        JPanel panel1 = new JPanel();
+        BorderLayout border1 = new BorderLayout();
+        panel1.setLayout(border1);
+        panel1.add(this.label1, BorderLayout.NORTH);
+        panel1.add(panel2, BorderLayout.CENTER);
+        panel1.add(this.button4, BorderLayout.EAST);
+        panel1.add(this.label2, BorderLayout.SOUTH);
+        
+        // contentPaneにパネルを追加
+        super.getContentPane().add(panel1);
+        
+        // ウィンドウの設定
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setSize(450, 200);
+        super.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        new ComplexTest("複雑なレイアウトテスト");
+    }
+}
+---
+
+配置説明:
+パネル1(BorderLayout)の構成:
+- NORTH(上): label1 (「タイトル」)
+- CENTER(中央): panel2 (入れ子のパネル)
+- EAST(右): button4 (「実行」ボタン)
+- SOUTH(下): label2 (「ステータスバー」)
+
+パネル2(FlowLayout)の構成:
+- button1, button2, button3を左から順に横並びで配置
+
+入れ子構造により、中央部分に3つのボタンが横並びになり、
+その上下左右にそれぞれラベルやボタンが配置される複雑なレイアウトを実現している。
+
+【課題4】調査報告 - GridLayout
+
+調査したレイアウトマネージャの名前:
+GridLayout
+
+機能:
+GridLayoutは、コンテナ内の部品を格子状(グリッド状)に配置するレイアウトマネージャである。
+コンストラクタで行数と列数を指定し、すべてのセルが同じサイズになる。
+部品は左から右、上から下の順に自動的に配置される。
+すべての部品が均等なサイズで配置されるため、計算機のボタン配置などに適している。
+
+引用元:
+- Oracle公式ドキュメント: https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
+- Java API仕様書: https://docs.oracle.com/javase/8/docs/api/java/awt/GridLayout.html
+
+実行したソースコード(GridLayoutTest.java):
+---
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.awt.GridLayout;
+
+public class GridLayoutTest extends JFrame {
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JButton button5;
+    private JButton button6;
+    
+    public GridLayoutTest(String title) {
+        super(title);
+        
+        // 部品の初期化
+        this.button1 = new JButton("1");
+        this.button2 = new JButton("2");
+        this.button3 = new JButton("3");
+        this.button4 = new JButton("4");
+        this.button5 = new JButton("5");
+        this.button6 = new JButton("6");
+        
+        // パネルとレイアウトマネージャの設定
+        // GridLayout(行数, 列数)で格子状に配置
+        JPanel panel1 = new JPanel();
+        GridLayout grid1 = new GridLayout(2, 3);
+        panel1.setLayout(grid1);
+        
+        // パネルに部品を追加(左から右、上から下の順)
+        panel1.add(this.button1);
+        panel1.add(this.button2);
+        panel1.add(this.button3);
+        panel1.add(this.button4);
+        panel1.add(this.button5);
+        panel1.add(this.button6);
+        
+        // contentPaneにパネルを追加
+        super.getContentPane().add(panel1);
+        
+        // ウィンドウの設定
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.setSize(400, 200);
+        super.setVisible(true);
+    }
+    
+    public static void main(String[] args) {
+        new GridLayoutTest("GridLayoutテスト");
+    }
+}
+---
+
+このプログラムでは2行3列のグリッドレイアウトを使用し、
+6つのボタンを均等なサイズで格子状に配置している。
+
+以上
