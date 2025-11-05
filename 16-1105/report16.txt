@@ -1,0 +1,140 @@
+4J 30番 百瀬 奏 テーマ16 レポート
+
+課題1: MyCat.java
+
+import java.io.*;
+
+public class MyCat {
+    public static void main(String[] args) {
+        try {
+            FileReader fr = new FileReader(args[0]);
+            BufferedReader br = new BufferedReader(fr);
+            String buf;
+            while ((buf = br.readLine()) != null) {
+                System.out.println(buf);
+            }
+            br.close();
+            fr.close();
+        }
+        catch (IOException ex) {
+            System.out.println("ファイル読込みエラー");
+            System.exit(1);
+        }
+    }
+}
+
+課題2: MyCatLine.java
+
+import java.io.*;
+
+public class MyCatLine {
+    public static void main(String[] args) {
+        try {
+            FileReader fr = new FileReader(args[0]);
+            BufferedReader br = new BufferedReader(fr);
+            String buf;
+            String all = "";
+            while ((buf = br.readLine()) != null) {
+                all += buf;
+                all += System.getProperty("line.separator");
+            }
+            br.close();
+            fr.close();
+            System.out.println(all);
+        }
+        catch (IOException ex) {
+            System.out.println("ファイル読込みエラー");
+            System.exit(1);
+        }
+    }
+}
+
+課題3: MyCopy.java
+
+import java.io.*;
+
+public class MyCopy {
+    public static void main(String[] args) {
+        try {
+            FileReader fr = new FileReader(args[0]);
+            BufferedReader br = new BufferedReader(fr);
+            String buf;
+            String all = "";
+            while ((buf = br.readLine()) != null) {
+                all += buf;
+                all += System.getProperty("line.separator");
+            }
+            br.close();
+            fr.close();
+            
+            FileWriter fw = new FileWriter(args[1]);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(all);
+            bw.close();
+            fw.close();
+        }
+        catch (IOException ex) {
+            System.out.println("ファイル入出力エラー");
+            System.exit(1);
+        }
+    }
+}
+
+課題4: MyCatAll.java
+
+import java.io.*;
+
+public class MyCatAll {
+    public static void main(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            try {
+                FileReader fr = new FileReader(args[i]);
+                BufferedReader br = new BufferedReader(fr);
+                String buf;
+                while ((buf = br.readLine()) != null) {
+                    System.out.println(buf);
+                }
+                br.close();
+                fr.close();
+            }
+            catch (IOException ex) {
+                System.out.println("ファイル読込みエラー: " + args[i]);
+                System.exit(1);
+            }
+        }
+    }
+}
+
+課題5: MyHTTPGet.java
+
+import java.io.*;
+import java.net.*;
+
+public class MyHTTPGet {
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("http://jsuri1.info.kushiro-ct.ac.jp/~tenmo/java/hello.txt");
+            
+            HttpURLConnection http = (HttpURLConnection)url.openConnection();
+            http.setRequestMethod("GET");
+            http.connect();
+            
+            InputStreamReader isr = new InputStreamReader(http.getInputStream());
+            BufferedReader br = new BufferedReader(isr);
+            
+            String buf;
+            while ((buf = br.readLine()) != null) {
+                System.out.println(buf);
+            }
+            br.close();
+            isr.close();
+        }
+        catch (IOException ex) {
+            System.out.println("ファイル読込みエラー");
+            System.exit(1);
+        }
+    }
+}
+
+ウェブサーバーから読み込んだファイルの内容:
+ウェブサーバーからのGET成功おめでとう!!
