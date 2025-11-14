@@ -1,0 +1,253 @@
+出席番号・名前・第17回
+
+【課題1】
+JTextFieldに1行入力してEnterを押すと、入力された文字列がJTextAreaに追加されていくGUIプログラム
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Kadai1 extends JFrame implements ActionListener
+{
+    private JTextField tf1;
+    private JTextArea ta1;
+
+    public Kadai1()
+    {
+        super("課題1: テキスト追加プログラム");
+        
+        this.tf1 = new JTextField(30);
+        this.tf1.addActionListener(this);
+        
+        this.ta1 = new JTextArea(20, 40);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(this.tf1, BorderLayout.NORTH);
+        panel.add(new JScrollPane(this.ta1), BorderLayout.CENTER);
+        
+        super.getContentPane().add(panel);
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == this.tf1)
+        {
+            String s = this.tf1.getText();
+            this.ta1.append(s);
+            this.ta1.append(System.getProperty("line.separator"));
+            this.tf1.setText("");
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        new Kadai1();
+    }
+}
+
+
+【課題2】
+ファイル名を入力する欄(JTextField)、ファイルを開くボタン(JButton)、ファイルの内容を表示するテキストエリア(JTextArea)から成るGUIプログラム
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+
+public class Kadai2 extends JFrame implements ActionListener
+{
+    private JTextField tf1;
+    private JButton btnOpen;
+    private JTextArea ta1;
+
+    public Kadai2()
+    {
+        super("課題2: ファイル読み込みプログラム");
+        
+        this.tf1 = new JTextField(30);
+        this.btnOpen = new JButton("ファイルを開く");
+        this.btnOpen.addActionListener(this);
+        
+        this.ta1 = new JTextArea(20, 50);
+        
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout());
+        topPanel.add(new JLabel("ファイル名:"));
+        topPanel.add(this.tf1);
+        topPanel.add(this.btnOpen);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(topPanel, BorderLayout.NORTH);
+        panel.add(new JScrollPane(this.ta1), BorderLayout.CENTER);
+        
+        super.getContentPane().add(panel);
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == this.btnOpen)
+        {
+            String filename = this.tf1.getText();
+            try
+            {
+                BufferedReader br = new BufferedReader(new FileReader(filename));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null)
+                {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                }
+                br.close();
+                this.ta1.setText(sb.toString());
+            }
+            catch (IOException ex)
+            {
+                JOptionPane.showMessageDialog(this, "ファイルの読み込みに失敗しました: " + ex.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        new Kadai2();
+    }
+}
+
+
+【課題3】
+保存機能に関する部分のソース
+
+    private JButton btnSave;  // フィールドに保存ボタンを追加
+
+    // コンストラクタで保存ボタンを生成し、イベントリスナーを登録
+    this.btnSave = new JButton("保存");
+    this.btnSave.addActionListener(this);
+
+    // actionPerformedメソッドに保存処理を追加
+    else if (e.getSource() == this.btnSave)
+    {
+        String filename = this.tf1.getText();
+        String content = this.ta1.getText();
+        try
+        {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            bw.write(content);
+            bw.close();
+            JOptionPane.showMessageDialog(this, "ファイルを保存しました");
+        }
+        catch (IOException ex)
+        {
+            JOptionPane.showMessageDialog(this, "ファイルの保存に失敗しました: " + ex.getMessage());
+        }
+    }
+
+
+【課題4】
+追加した機能に関する解説
+
+■追加した機能
+1. スクロールバー機能
+   - JScrollPaneを使ってJTextAreaにスクロールバーを追加
+   - 長いテキストでも快適に編集可能
+
+2. ファイル選択ダイアログ(JFileChooser)
+   - ファイル名欄が空の状態で「開く」「保存」ボタンを押すとダイアログが表示される
+   - GUIでファイルを選択できるため、パスを手入力する必要がない
+
+3. 新規作成ボタン
+   - テキストエリアとファイル名欄をクリアして新規ファイルを作成開始できる
+
+4. 検索機能
+   - 入力ダイアログで検索文字列を入力
+   - 見つかった文字列を自動的に選択状態にする
+   - 見つからなかった場合はその旨をメッセージで表示
+
+5. ステータスバー
+   - JLabelを使って画面下部にステータスバーを配置
+   - リアルタイムで文字数と行数を表示
+   - キー入力のたびに自動更新される
+
+■追加機能のソース部分
+
+// ステータスバーの定義
+private JLabel statusBar;
+private int charCount = 0;
+private int lineCount = 0;
+
+// コンストラクタ内でステータスバーを生成
+this.statusBar = new JLabel("文字数: 0  行数: 0");
+this.statusBar.setBorder(BorderFactory.createEtchedBorder());
+
+// JTextAreaにキーリスナーを追加してリアルタイム更新
+this.ta1.addKeyListener(new KeyAdapter() {
+    public void keyReleased(KeyEvent e) {
+        updateStatus();
+    }
+});
+
+// ステータス更新メソッド
+private void updateStatus()
+{
+    String text = this.ta1.getText();
+    this.charCount = text.length();
+    this.lineCount = text.isEmpty() ? 0 : text.split(System.getProperty("line.separator"), -1).length;
+    this.statusBar.setText("文字数: " + this.charCount + "  行数: " + this.lineCount);
+}
+
+// JFileChooserによるファイル選択（開くボタンの処理内）
+if (filename.isEmpty())
+{
+    JFileChooser fileChooser = new JFileChooser();
+    int result = fileChooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION)
+    {
+        filename = fileChooser.getSelectedFile().getAbsolutePath();
+        this.tf1.setText(filename);
+    }
+    else
+    {
+        return;
+    }
+}
+
+// 新規作成ボタンの処理
+else if (e.getSource() == this.btnNew)
+{
+    this.ta1.setText("");
+    this.tf1.setText("");
+    updateStatus();
+    JOptionPane.showMessageDialog(this, "新規ファイルを作成しました");
+}
+
+// 検索機能の処理
+else if (e.getSource() == this.btnSearch)
+{
+    String searchText = JOptionPane.showInputDialog(this, "検索する文字列を入力してください:");
+    if (searchText != null && !searchText.isEmpty())
+    {
+        String content = this.ta1.getText();
+        int index = content.indexOf(searchText);
+        if (index != -1)
+        {
+            this.ta1.setCaretPosition(index);
+            this.ta1.select(index, index + searchText.length());
+            JOptionPane.showMessageDialog(this, "文字列が見つかりました");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "文字列が見つかりませんでした");
+        }
+    }
+}
+
+■将来的に実装したい機能
+- UTF-8 Shift-JISへの変換
