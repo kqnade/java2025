@@ -1,0 +1,477 @@
+4J 30番 百瀬 奏 テーマ18 レポート
+
+課題1: 円や四角形等のグラフィックスを描くプログラム
+
+--- MyPanel.java ---
+import javax.swing.*;
+import java.awt.*;
+
+public class MyPanel extends JPanel {
+    public MyPanel() {
+        super.setBackground(Color.black); // 背景色を黒に設定
+        super.setPreferredSize(new Dimension(640, 240)); // 大きさを640x240に設定
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い、
+
+        g.setColor(Color.green); // 前景色を緑に設定
+        g.drawLine(50, 50, 100, 100); // 直線を描画
+        g.drawOval(32, 16, 256, 128); // 楕円を描画
+        g.drawRect(200, 80, 150, 75); // 長方形を描画
+        g.drawString("Hello, Graphics!", 400, 120); // 文字列を描画
+    }
+}
+
+--- MyFrame.java ---
+import javax.swing.*;
+import java.awt.*;
+
+public class MyFrame extends JFrame {
+    private MyPanel mp; // MyFrame HAS-A MyPanel の関係を構築
+
+    public MyFrame() {
+        this.mp = new MyPanel(); // 描画用のパネル
+        JPanel panel1 = new JPanel(); // 配置用のパネル
+        panel1.add(this.mp); // 配置用のパネルに、描画用のパネルを入れる
+        super.getContentPane().add(panel1);
+
+        super.setTitle("Graphics Drawing Example");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new MyFrame();
+    }
+}
+
+
+課題2: JTextFieldとJSliderを連携させるプログラム
+
+--- SliderTextFieldLink.java ---
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+
+public class SliderTextFieldLink extends JFrame implements ChangeListener {
+    private JSlider slider;
+    private JTextField textField;
+
+    public SliderTextFieldLink() {
+        super.setTitle("Slider and TextField Link");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create JSlider
+        slider = new JSlider(0, 100, 50); // min, max, initial
+        slider.setMajorTickSpacing(20);
+        slider.setMinorTickSpacing(5);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.addChangeListener(this); // Add ChangeListener to itself
+
+        // Create JTextField
+        textField = new JTextField(5); // 5 columns wide
+        textField.setEditable(false); // Make it read-only
+        textField.setText(String.valueOf(slider.getValue())); // Set initial value
+
+        // Layout components
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.add(slider);
+        panel.add(textField);
+
+        super.getContentPane().add(panel, BorderLayout.CENTER);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource() == slider) {
+            textField.setText(String.valueOf(slider.getValue()));
+        }
+    }
+
+    public static void main(String[] args) {
+        new SliderTextFieldLink();
+    }
+}
+
+課題3: スライダーを動かすと図形が移動または拡大縮小するプログラム
+
+【実装内容】拡大縮小
+【ソースコード】
+
+--- MovablePanel.java ---
+import javax.swing.*;
+import java.awt.*;
+
+public class MovablePanel extends JPanel {
+    private int size; // 図形の大きさを保存するためのフィールド
+
+    public MovablePanel() {
+        super.setBackground(Color.black);
+        super.setPreferredSize(new Dimension(640, 240));
+        this.size = 50; // 初期サイズ
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        g.setColor(Color.cyan);
+        // 楕円を描画（拡大縮小）
+        // drawOval(x, y, width, height)
+        // 中央に描画するため、座標を調整
+        int x = 320 - this.size / 2;
+        int y = 120 - this.size / 2;
+        g.drawOval(x, y, this.size, this.size);
+        
+        g.setColor(Color.yellow);
+        g.fillOval(x, y, this.size, this.size);
+    }
+}
+
+--- MovableFrame.java ---
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+
+public class MovableFrame extends JFrame implements ChangeListener {
+    private MovablePanel mp;
+    private JSlider slider1;
+    private JTextField textField;
+
+    public MovableFrame() {
+        this.mp = new MovablePanel();
+        
+        // スライダーを作成
+        this.slider1 = new JSlider(10, 200, 50);
+        this.slider1.setMajorTickSpacing(50);
+        this.slider1.setMinorTickSpacing(10);
+        this.slider1.setPaintTicks(true);
+        this.slider1.setPaintLabels(true);
+        this.slider1.addChangeListener(this);
+        
+        // テキストフィールドを作成
+        this.textField = new JTextField(5);
+        this.textField.setEditable(false);
+        this.textField.setText("" + this.slider1.getValue());
+        
+        // 配置用のパネル
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(new JLabel("Size:"));
+        controlPanel.add(this.slider1);
+        controlPanel.add(this.textField);
+        
+        JPanel panel1 = new JPanel();
+        panel1.add(this.mp);
+        
+        super.getContentPane().add(panel1, BorderLayout.CENTER);
+        super.getContentPane().add(controlPanel, BorderLayout.SOUTH);
+        
+        super.setTitle("Movable Graphics");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource() == this.slider1) {
+            int val = this.slider1.getValue();
+            this.textField.setText("" + val);
+            this.mp.setSize(val);
+            this.mp.repaint();
+        }
+    }
+
+    public static void main(String[] args) {
+        new MovableFrame();
+    }
+}
+
+課題4: 様々な入力部品を用いたインタラクティブなグラフィックスプログラム
+【ソースコード】
+
+--- GraphicsPanel.java ---
+import javax.swing.*;
+import java.awt.*;
+
+public class GraphicsPanel extends JPanel {
+    private int xPos;
+    private int yPos;
+    private int size;
+    private boolean drawCircle;
+    private boolean drawSquare;
+    private boolean drawTriangle;
+    private Color shapeColor;
+
+    public GraphicsPanel() {
+        super.setBackground(Color.white);
+        super.setPreferredSize(new Dimension(640, 480));
+        this.xPos = 320;
+        this.yPos = 240;
+        this.size = 50;
+        this.drawCircle = true;
+        this.drawSquare = false;
+        this.drawTriangle = false;
+        this.shapeColor = Color.blue;
+    }
+
+    public void setXPos(int xPos) {
+        this.xPos = xPos;
+    }
+
+    public void setYPos(int yPos) {
+        this.yPos = yPos;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setDrawCircle(boolean drawCircle) {
+        this.drawCircle = drawCircle;
+    }
+
+    public void setDrawSquare(boolean drawSquare) {
+        this.drawSquare = drawSquare;
+    }
+
+    public void setDrawTriangle(boolean drawTriangle) {
+        this.drawTriangle = drawTriangle;
+    }
+
+    public void setShapeColor(Color color) {
+        this.shapeColor = color;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setStroke(new BasicStroke(2.0F));
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        g.setColor(this.shapeColor);
+        
+        // 円を描画
+        if (this.drawCircle) {
+            g.fillOval(this.xPos - this.size / 2, this.yPos - this.size / 2, this.size, this.size);
+        }
+        
+        // 四角形を描画
+        if (this.drawSquare) {
+            g.fillRect(this.xPos - this.size / 2, this.yPos - this.size / 2, this.size, this.size);
+        }
+        
+        // 三角形を描画
+        if (this.drawTriangle) {
+            int[] xPoints = {
+                this.xPos,
+                this.xPos - this.size / 2,
+                this.xPos + this.size / 2
+            };
+            int[] yPoints = {
+                this.yPos - this.size / 2,
+                this.yPos + this.size / 2,
+                this.yPos + this.size / 2
+            };
+            g.fillPolygon(xPoints, yPoints, 3);
+        }
+        
+        // 座標情報を表示
+        g.setColor(Color.black);
+        g.drawString("Position: (" + this.xPos + ", " + this.yPos + ")", 10, 20);
+        g.drawString("Size: " + this.size, 10, 40);
+    }
+}
+
+--- GraphicsFrame.java ---
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GraphicsFrame extends JFrame implements ChangeListener, ActionListener {
+    private GraphicsPanel gp;
+    private JSlider xSlider;
+    private JSlider ySlider;
+    private JSlider sizeSlider;
+    private JTextField xField;
+    private JTextField yField;
+    private JTextField sizeField;
+    private JCheckBox circleCheck;
+    private JCheckBox squareCheck;
+    private JCheckBox triangleCheck;
+    private JButton redButton;
+    private JButton greenButton;
+    private JButton blueButton;
+
+    public GraphicsFrame() {
+        this.gp = new GraphicsPanel();
+        
+        // X座標用スライダーとテキストフィールド
+        this.xSlider = new JSlider(0, 640, 320);
+        this.xSlider.addChangeListener(this);
+        this.xField = new JTextField(5);
+        this.xField.setEditable(false);
+        this.xField.setText("" + this.xSlider.getValue());
+        
+        // Y座標用スライダーとテキストフィールド
+        this.ySlider = new JSlider(0, 480, 240);
+        this.ySlider.addChangeListener(this);
+        this.yField = new JTextField(5);
+        this.yField.setEditable(false);
+        this.yField.setText("" + this.ySlider.getValue());
+        
+        // サイズ用スライダーとテキストフィールド
+        this.sizeSlider = new JSlider(10, 200, 50);
+        this.sizeSlider.addChangeListener(this);
+        this.sizeField = new JTextField(5);
+        this.sizeField.setEditable(false);
+        this.sizeField.setText("" + this.sizeSlider.getValue());
+        
+        // チェックボックス
+        this.circleCheck = new JCheckBox("Circle", true);
+        this.circleCheck.addActionListener(this);
+        this.squareCheck = new JCheckBox("Square", false);
+        this.squareCheck.addActionListener(this);
+        this.triangleCheck = new JCheckBox("Triangle", false);
+        this.triangleCheck.addActionListener(this);
+        
+        // 色変更ボタン
+        this.redButton = new JButton("Red");
+        this.redButton.addActionListener(this);
+        this.greenButton = new JButton("Green");
+        this.greenButton.addActionListener(this);
+        this.blueButton = new JButton("Blue");
+        this.blueButton.addActionListener(this);
+        
+        // レイアウト
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+        
+        JPanel xPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        xPanel.add(new JLabel("X:"));
+        xPanel.add(this.xSlider);
+        xPanel.add(this.xField);
+        
+        JPanel yPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        yPanel.add(new JLabel("Y:"));
+        yPanel.add(this.ySlider);
+        yPanel.add(this.yField);
+        
+        JPanel sizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sizePanel.add(new JLabel("Size:"));
+        sizePanel.add(this.sizeSlider);
+        sizePanel.add(this.sizeField);
+        
+        JPanel shapePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        shapePanel.add(new JLabel("Shape:"));
+        shapePanel.add(this.circleCheck);
+        shapePanel.add(this.squareCheck);
+        shapePanel.add(this.triangleCheck);
+        
+        JPanel colorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        colorPanel.add(new JLabel("Color:"));
+        colorPanel.add(this.redButton);
+        colorPanel.add(this.greenButton);
+        colorPanel.add(this.blueButton);
+        
+        controlPanel.add(xPanel);
+        controlPanel.add(yPanel);
+        controlPanel.add(sizePanel);
+        controlPanel.add(shapePanel);
+        controlPanel.add(colorPanel);
+        
+        JPanel drawPanel = new JPanel();
+        drawPanel.add(this.gp);
+        
+        super.getContentPane().add(drawPanel, BorderLayout.CENTER);
+        super.getContentPane().add(controlPanel, BorderLayout.SOUTH);
+        
+        super.setTitle("Interactive Graphics");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if (e.getSource() == this.xSlider) {
+            int val = this.xSlider.getValue();
+            this.xField.setText("" + val);
+            this.gp.setXPos(val);
+            this.gp.repaint();
+        } else if (e.getSource() == this.ySlider) {
+            int val = this.ySlider.getValue();
+            this.yField.setText("" + val);
+            this.gp.setYPos(val);
+            this.gp.repaint();
+        } else if (e.getSource() == this.sizeSlider) {
+            int val = this.sizeSlider.getValue();
+            this.sizeField.setText("" + val);
+            this.gp.setSize(val);
+            this.gp.repaint();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.circleCheck) {
+            this.gp.setDrawCircle(this.circleCheck.isSelected());
+            this.gp.repaint();
+        } else if (e.getSource() == this.squareCheck) {
+            this.gp.setDrawSquare(this.squareCheck.isSelected());
+            this.gp.repaint();
+        } else if (e.getSource() == this.triangleCheck) {
+            this.gp.setDrawTriangle(this.triangleCheck.isSelected());
+            this.gp.repaint();
+        } else if (e.getSource() == this.redButton) {
+            this.gp.setShapeColor(Color.red);
+            this.gp.repaint();
+        } else if (e.getSource() == this.greenButton) {
+            this.gp.setShapeColor(Color.green);
+            this.gp.repaint();
+        } else if (e.getSource() == this.blueButton) {
+            this.gp.setShapeColor(Color.blue);
+            this.gp.repaint();
+        }
+    }
+
+    public static void main(String[] args) {
+        new GraphicsFrame();
+    }
+}
+
+【使用方法】
+1. スライダー操作（ChangeListener使用）
+   - X座標スライダー: 図形のX位置を0〜640の範囲で移動
+   - Y座標スライダー: 図形のY位置を0〜480の範囲で移動
+   - サイズスライダー: 図形のサイズを10〜200の範囲で拡大縮小
+   - 各スライダーの値はテキストフィールドにリアルタイムで表示
+2. チェックボックス操作（ActionListener使用）
+   - Circle: 円の表示/非表示を切り替え
+   - Square: 四角形の表示/非表示を切り替え
+   - Triangle: 三角形の表示/非表示を切り替え
+   - 複数の図形を同時に表示可能（重ね合わせ）
+3. ボタン操作（ActionListener使用）
+   - Redボタン: 図形の色を赤に変更
+   - Greenボタン: 図形の色を緑に変更
+   - Blueボタン: 図形の色を青に変更
+4. その他の機能
+   - Graphics2Dを使用したアンチエイリアシング処理で滑らかな描画
+   - 画面左上に現在の座標とサイズ情報を表示
+   - 複数のイベントリスナー（ChangeListenerとActionListener）を同時実装
+
+================================================================================
