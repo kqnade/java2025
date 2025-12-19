@@ -1,0 +1,335 @@
+4J 30番 百瀬 奏 テーマ20 レポート
+
+【課題1】
+Timerクラスを用いて、1秒ごとにpaintComponentメソッドが呼び出されるプログラムを作成せよ。
+
+[ソースコード: Task1.java]
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Task1 extends JFrame implements ActionListener {
+    private MyPanel mp;
+    private Timer timer;
+
+    public Task1() {
+        this.mp = new MyPanel();
+        JPanel panel1 = new JPanel();
+        panel1.add(this.mp);
+        super.getContentPane().add(panel1);
+
+        super.setTitle("Task1: Timer Test");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+
+        this.timer = new Timer(1000, this);
+        this.timer.start();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        System.out.println("Timer: actionPerformed called");
+        this.mp.repaint();
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    public static void main(String[] args) {
+        new Task1();
+    }
+
+    class MyPanel extends JPanel {
+        public MyPanel() {
+            super.setBackground(Color.white);
+            super.setPreferredSize(new Dimension(640, 480));
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            System.out.println("paintComponent is called");
+            
+            g.setColor(Color.blue);
+            g.drawString("Timer is running... (Check console)", 200, 240);
+        }
+    }
+}
+
+================================================================================
+
+【課題2】
+画像ファイルを一つ読み込み、描画パネル内の適当な固定位置に、その画像を描画するプログラムを作成せよ。
+
+[ソースコード: Task2.java]
+import javax.swing.*;
+import java.awt.*;
+
+public class Task2 extends JFrame {
+    private MyPanel mp;
+
+    public Task2() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        MediaTracker tracker = new MediaTracker(this);
+
+        Image chara = tk.getImage("chara.png");
+        tracker.addImage(chara, 0);
+
+        try {
+            tracker.waitForAll();
+        } catch (Exception ex) {
+            System.exit(1);
+        }
+
+        this.mp = new MyPanel(chara);
+        JPanel panel1 = new JPanel();
+        panel1.add(this.mp);
+        super.getContentPane().add(panel1);
+
+        super.setTitle("Task2: Single Image Display");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Task2();
+    }
+
+    class MyPanel extends JPanel {
+        private Image chara;
+
+        public MyPanel(Image chara) {
+            this.chara = chara;
+            super.setBackground(Color.white);
+            super.setPreferredSize(new Dimension(640, 480));
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            g.setColor(Color.black);
+            g.drawString("Single image displayed at fixed position (200, 200)", 150, 100);
+            
+            g.drawImage(this.chara, 200, 200, this);
+        }
+    }
+}
+
+================================================================================
+
+【課題3】
+画像ファイルを複数枚読み込み、適当な固定位置に、それぞれ位置をずらして、全て同時に描画するプログラムを作成せよ。
+
+[ソースコード: Task3.java]
+import javax.swing.*;
+import java.awt.*;
+
+public class Task3 extends JFrame {
+    private MyPanel mp;
+
+    public Task3() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        MediaTracker tracker = new MediaTracker(this);
+
+        Image[] chara_array = new Image[3];
+        for (int i = 0; i < 3; i++) {
+            String filename = "chara" + i + ".png";
+            System.out.println("filename = " + filename);
+            chara_array[i] = tk.getImage(filename);
+            tracker.addImage(chara_array[i], i);
+        }
+
+        try {
+            tracker.waitForAll();
+        } catch (Exception ex) {
+            System.exit(1);
+        }
+
+        this.mp = new MyPanel(chara_array);
+        JPanel panel1 = new JPanel();
+        panel1.add(this.mp);
+        super.getContentPane().add(panel1);
+
+        super.setTitle("Task3: Multiple Images Display");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new Task3();
+    }
+
+    class MyPanel extends JPanel {
+        private Image[] chara_array;
+
+        public MyPanel(Image[] chara_array) {
+            this.chara_array = chara_array;
+            super.setBackground(Color.white);
+            super.setPreferredSize(new Dimension(640, 480));
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            g.setColor(Color.black);
+            g.drawString("Multiple images displayed at different positions", 180, 50);
+            
+            for (int i = 0; i < this.chara_array.length; i++) {
+                int x = 150 + i * 150;
+                int y = 200;
+                g.drawImage(this.chara_array[i], x, y, this);
+                g.drawString("Image " + i, x + 15, y + 80);
+            }
+        }
+    }
+}
+
+================================================================================
+
+【課題4】
+課題3のプログラムを元に、Timerクラスを用いて画像のアニメーション表示を行うプログラムを作成せよ。
+
+[ソースコード: Task4.java]
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Task4 extends JFrame implements ActionListener {
+    private MyPanel mp;
+    private Timer timer;
+
+    public Task4() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        MediaTracker tracker = new MediaTracker(this);
+
+        Image background = tk.getImage("background.png");
+        tracker.addImage(background, 0);
+
+        Image[] chara_array = new Image[3];
+        for (int i = 0; i < 3; i++) {
+            String filename = "chara" + i + ".png";
+            System.out.println("filename = " + filename);
+            chara_array[i] = tk.getImage(filename);
+            tracker.addImage(chara_array[i], i + 1);
+        }
+
+        try {
+            tracker.waitForAll();
+        } catch (Exception ex) {
+            System.out.println("Image loading failed");
+            System.exit(1);
+        }
+
+        this.mp = new MyPanel(background, chara_array);
+        JPanel panel1 = new JPanel();
+        panel1.add(this.mp);
+        super.getContentPane().add(panel1);
+
+        super.setTitle("Task4: Animation with Timer");
+        super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        super.pack();
+        super.setVisible(true);
+
+        this.timer = new Timer(100, this);
+        this.timer.start();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        this.mp.repaint();
+        Toolkit.getDefaultToolkit().sync();
+    }
+
+    public static void main(String[] args) {
+        new Task4();
+    }
+
+    class MyPanel extends JPanel {
+        private Image background;
+        private Image[] chara_array;
+        private int chara_i;
+        private int chara_x;
+        private int chara_y;
+        private int direction;
+
+        public MyPanel(Image background, Image[] chara_array) {
+            this.background = background;
+            this.chara_array = chara_array;
+            this.chara_i = 0;
+            this.chara_x = 100;
+            this.chara_y = 320;
+            this.direction = 1;
+            
+            super.setBackground(Color.white);
+            super.setPreferredSize(new Dimension(640, 480));
+        }
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            if (this.background != null) {
+                g.drawImage(this.background, 0, 0, this);
+            }
+            
+            g.drawImage(this.chara_array[this.chara_i], this.chara_x, this.chara_y, this);
+            
+            this.chara_i++;
+            if (this.chara_i >= this.chara_array.length) {
+                this.chara_i = 0;
+            }
+            
+            this.chara_x += 3 * this.direction;
+            
+            if (this.chara_x > 550) {
+                this.direction = -1;
+            } else if (this.chara_x < 10) {
+                this.direction = 1;
+            }
+        }
+    }
+}
+
+[アニメーションの説明]
+
+■絵的な説明:
+- 背景: 空のグラデーション(青色)と地面(緑色)、太陽(黄色)が描かれた背景画像を表示
+- キャラクター: 黄色い丸い顔のキャラクターが画面を左右に往復移動します
+- キャラクターは移動しながら、表情が変化します(chara0→chara1→chara2→chara0...と循環)
+
+■コード的な説明:
+
+1. タイマー設定:
+   - Timer(100, this)により、100ミリ秒(0.1秒)ごとにactionPerformedが呼び出されます
+   - actionPerformedからrepaint()を呼び出すことで、paintComponentが定期的に実行されます
+
+2. 座標の変化:
+   - chara_x: キャラクターのx座標
+     初期値: 100
+     更新: chara_x += 3 * direction
+     右移動時(direction=1): 3ピクセルずつ増加
+     左移動時(direction=-1): 3ピクセルずつ減少
+   - chara_y: キャラクターのy座標
+     固定値: 320 (地面の上に配置)
+   
+3. 方向転換:
+   - chara_x > 550 のとき: direction = -1 (右端で左向きに転換)
+   - chara_x < 10 のとき: direction = 1 (左端で右向きに転換)
+
+4. 画像番号の変化:
+   - chara_i: 現在表示する画像の番号
+     初期値: 0
+     更新: chara_i++ (毎回インクリメント)
+     範囲: 0, 1, 2, 0, 1, 2, ... (配列の長さに達したら0に戻る)
+   
+5. 描画順序:
+   - 背景画像を座標(0, 0)に描画
+   - キャラクター画像を座標(chara_x, chara_y)に描画
+   - 座標と画像番号を更新
+
+この仕組みにより、キャラクターが左右に往復しながら表情を変化させるアニメーションが実現されています。
+
+■使用画像:
+- background.png (640x480ピクセル): 空と地面の背景
+- chara0.png, chara1.png, chara2.png (各64x64ピクセル): 黄色い顔の表情違い
